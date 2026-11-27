@@ -120,6 +120,9 @@ export function ClientPane({ inv, set }: { inv: Invoice; set: Setter }) {
       <Field label="البريد الإلكتروني" hint="يُستعمل لإنشاء مسودة الإرسال بدقة.">
         <input className="input text-left" style={{ direction: "ltr" }} type="email" value={client.email} onChange={(e) => upd({ email: e.target.value })} placeholder="client@company.ma" />
       </Field>
+      <Field label="هاتف / واتساب العميل" hint="اختياري — يفتح تذكير الأداء مباشرة في واتساب.">
+        <input className="input text-left" style={{ direction: "ltr" }} value={client.phone} onChange={(e) => upd({ phone: e.target.value })} placeholder="+212 6 61 23 45 67" />
+      </Field>
       <Field label="العنوان" hint="اختياري — يكفي المدينة عادة.">
         <textarea className="input min-h-[60px] resize-y" value={client.address} onChange={(e) => upd({ address: e.target.value })} placeholder="حي المعاريف، الدار البيضاء" />
       </Field>

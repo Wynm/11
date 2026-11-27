@@ -9,6 +9,7 @@ import {
   HowItWorks,
   PainStrip,
   Pricing,
+  ProofStrip,
   ProBanner,
   UseCases,
 } from "@/components/sections";
@@ -20,6 +21,7 @@ export default function HomePage() {
       <SiteHeader />
       <main>
         <Hero />
+        <ProofStrip />
         <PainStrip />
         <HowItWorks />
         <Features />

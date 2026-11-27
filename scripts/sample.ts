@@ -14,7 +14,7 @@ export const sample = {
     address: "شارع الحسن الثاني، حي النخيل، فاس",
     bankName: "Attijariwafa Bank", rib: "007 780 0001234567890123 45",
   },
-  client: { company: "Studio Nord SARL", name: "سارة المنصوري", email: "sara@studionord.ma", address: "حي المعاريف، الدار البيضاء", ice: "001234567800034" },
+  client: { company: "Studio Nord SARL", name: "سارة المنصوري", email: "sara@studionord.ma", address: "حي المعاريف، الدار البيضاء", ice: "001234567800034", phone: "+212 6 62 11 44 09" },
   items: [
     { id: "d1", description: "جلسة تصوير منتجات — 12 صورة معدّلة", qty: 1, unitPrice: 2800 },
     { id: "d2", description: "مونتاج وتسليم رقمي للفيديوهات", qty: 2, unitPrice: 700 },

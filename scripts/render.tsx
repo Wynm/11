@@ -13,7 +13,7 @@ const page = (body: string, dir: string, lang: string) => `<!doctype html><html 
 
 const ar = renderToStaticMarkup(React.createElement(InvoiceSheet, { inv: sample }));
 const fr = renderToStaticMarkup(React.createElement(InvoiceSheet, { inv: { ...sample, language: "fr" } }));
-const quote = renderToStaticMarkup(React.createElement(InvoiceSheet, { inv: { ...sample, kind: "quote", number: "DEV-2026-004", vatRate: null, client: { company: "", name: "", email: "", address: "", ice: "" }, items: [{ id: "q", description: "شعار وهوية بصرية", qty: 1, unitPrice: 3500 }] } }));
+const quote = renderToStaticMarkup(React.createElement(InvoiceSheet, { inv: { ...sample, kind: "quote", number: "DEV-2026-004", vatRate: null, client: { company: "", name: "", email: "", phone: "", address: "", ice: "" }, items: [{ id: "q", description: "شعار وهوية بصرية", qty: 1, unitPrice: 3500 }] } }));
 
 writeFileSync("/tmp/rt/ar.html", page(ar, "rtl", "ar"));
 writeFileSync("/tmp/rt/fr.html", page(fr, "ltr", "fr"));

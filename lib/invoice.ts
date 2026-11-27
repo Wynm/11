@@ -9,6 +9,7 @@ export type Client = {
   name: string;
   company: string;
   email: string;
+  phone: string;
   address: string;
   ice: string;
 };
@@ -103,6 +104,7 @@ export const EMPTY_CLIENT: Client = {
   name: "",
   company: "",
   email: "",
+  phone: "",
   address: "",
   ice: "",
 };
@@ -194,6 +196,7 @@ export const sanitizeInvoice = (raw: unknown): Invoice => {
       name: str(clientRaw.name, 120),
       company: str(clientRaw.company, 160),
       email: str(clientRaw.email, 120),
+      phone: str(clientRaw.phone, 40),
       address: str(clientRaw.address, 240),
       ice: str(clientRaw.ice, 30),
     },

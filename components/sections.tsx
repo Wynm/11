@@ -400,6 +400,32 @@ export function Faq() {
   );
 }
 
+export function ProofStrip() {
+  const rows = [
+    { k: "9", l: "شروط قانونية تُفحص قبل التصدير", sub: "ICE · IF · RC · ترقيم · TVA · مبلغ بالحروف" },
+    { k: "60s", l: "من فتح الموقع إلى PDF جاهز", sub: "بلا حساب، بلا بريد، بلا انتظار" },
+    { k: "0", l: "بايت من بياناتك يغادر متصفحك", sub: "التخزين محلي، والمشاركة نسخة مجمّدة اختيارية" },
+    { k: "AR / FR", l: "مستند واحد بلغتين في نقرة", sub: "بالعربية أو الفرنسية حسب عميلك" },
+  ];
+  return (
+    <section className="border-y border-line bg-white/50">
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+        {rows.map((r) => (
+          <div key={r.l} className="flex items-start gap-3">
+            <div className="tnum shrink-0 rounded-lg bg-pine-soft px-2 py-1 text-[15px] font-extrabold text-pine" style={{ direction: "ltr" }}>
+              {r.k}
+            </div>
+            <div>
+              <div className="text-[13px] font-extrabold leading-snug">{r.l}</div>
+              <div className="mt-0.5 text-[11.5px] leading-snug text-muted">{r.sub}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function FinalCta() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-6 pt-24 sm:px-6">

@@ -39,6 +39,7 @@ export function SeedDemo({ enabled }: { enabled: boolean }) {
         email: "sara@studionord.ma",
         address: "حي المعاريف، الدار البيضاء",
         ice: "001234567800034",
+        phone: "+212 662 11 44 09",
       },
       items: [
         { id: "d1", description: "جلسة تصوير منتجات — 12 صورة معدّلة", qty: 1, unitPrice: 2800 },

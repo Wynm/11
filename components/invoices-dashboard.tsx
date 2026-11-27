@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  AlarmClock,
   ArrowLeft,
   BadgeCheck,
   Banknote,
@@ -180,6 +181,9 @@ export function InvoicesDashboard() {
                 <Sparkles className="h-3 w-3" /> ترقية
               </Link>
             )}
+            <Link href="/collections" className="inline-flex items-center gap-1.5 rounded-lg border border-clay/25 bg-clay/5 px-2.5 py-1.5 text-[12px] font-extrabold text-clay transition hover:bg-clay/10">
+              <AlarmClock className="h-3.5 w-3.5" /> التحصيل
+            </Link>
             <Link href="/" className="hidden text-[13px] font-bold text-muted hover:text-ink sm:block">الرئيسية</Link>
             <Link href="/new" className="btn-primary !px-4 !py-2.5">
               <Plus className="h-4 w-4" /> فاتورة جديدة
@@ -235,6 +239,26 @@ export function InvoicesDashboard() {
             + عرض ثمن
           </Link>
         </div>
+
+        {ready && withTotals.some((r) => r._late) ? (
+          <Link
+            href="/collections"
+            className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl2 border border-clay/30 bg-clay/5 px-4 py-3 transition hover:bg-clay/10"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay text-white">
+                <AlarmClock className="h-4 w-4" />
+              </span>
+              <div>
+                <div className="text-[13px] font-extrabold text-clay">
+                  {withTotals.filter((r) => r._late).length} فاتورة تجاوزت أجلها — رسالة تذكير جاهزة الآن
+                </div>
+                <div className="text-[11.5px] text-clay/70">نص عربي/فرنسي مع مرجع المادة 78 من مدونة التجارة</div>
+              </div>
+            </div>
+            <span className="text-[12px] font-extrabold text-clay">افتح التحصيل ←</span>
+          </Link>
+        ) : null}
 
         {!pro.active ? (
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl2 border border-line bg-white px-4 py-3 shadow-card">
