@@ -27,9 +27,11 @@ const token = () => {
 export async function POST(req: Request) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) {
+  // Not configured (or still holding example values) → the client falls back to a
+  // self-contained link, so this is a normal state, not a failure.
+  if (!url || !key || !url.startsWith("https://") || /YOUR_PROJECT|xxx/i.test(key)) {
     return NextResponse.json(
-      { error: "cloud_not_configured", message: "رابط المشاركة غير مهيأ على هذا النشر بعد." },
+      { error: "cloud_not_configured", message: "التخزين السحابي غير مهيأ — يُنشأ رابط ذاتي." },
       { status: 503 },
     );
   }
