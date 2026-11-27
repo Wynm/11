@@ -10,7 +10,11 @@ export function SiteHeader() {
           <Link href="/#how" className="hover:text-ink transition">كيف يعمل</Link>
           <Link href="/#features" className="hover:text-ink transition">المزايا</Link>
           <Link href="/#pricing" className="hover:text-ink transition">الأثمنة</Link>
-          <Link href="/#faq" className="hover:text-ink transition">الأسئلة</Link>
+          <Link href="/tools/tva" className="hover:text-ink transition">حاسبة TVA</Link>
+          <Link href="/pro" className="flex items-center gap-1.5 text-ink">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-saffron" />
+            برو
+          </Link>
         </nav>
         <div className="flex items-center gap-2">
           <Link href="/invoices" className="hidden sm:inline-flex btn-ghost">

@@ -15,10 +15,10 @@ const b64url = (bytes: Uint8Array) => {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
-const unb64url = (s: string) => {
+const unb64url = (s: string): Uint8Array<ArrayBuffer> => {
   const pad = s.replace(/-/g, "+").replace(/_/g, "/");
   const bin = atob(pad + "=".repeat((4 - (pad.length % 4)) % 4));
-  const out = new Uint8Array(bin.length);
+  const out = new Uint8Array(new ArrayBuffer(bin.length));
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
 };
@@ -37,7 +37,7 @@ export async function encodeDoc(inv: Invoice): Promise<string> {
 export async function decodeDoc(payload: string): Promise<Invoice> {
   const kind = payload.slice(0, 1);
   const bytes = unb64url(payload.slice(1));
-  let json: Uint8Array;
+  let json: Uint8Array<ArrayBuffer>;
   if (kind === "z") {
     const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
     json = new Uint8Array(await new Response(stream).arrayBuffer());

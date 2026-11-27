@@ -27,6 +27,17 @@ export type Issuer = {
   rib: string;
 };
 
+export type Branding = {
+  /** accent colour used for the document frame and totals */
+  accent: string;
+  /** "١" hides the "made with Fatoura" footer line (Pro) */
+  hideFooter: boolean;
+  /** optional logo shipped as a data URL (max ~200 KB) */
+  logo: string;
+};
+
+export const DEFAULT_BRANDING: Branding = { accent: "#0B5D50", hideFooter: false, logo: "" };
+
 export type Invoice = {
   v: 1;
   /** "invoice" = facture, "quote" = devis */
@@ -45,6 +56,8 @@ export type Invoice = {
   vatRate: number | null; // null = no tax entered yet, blocks export
   notes: string;
   paymentTerms: string;
+  /** Pro customisation of the printed document */
+  branding?: Branding;
   /** seq id used to allocate the next invoice number locally */
   createdAt: number;
   paidAt: number | null;
@@ -195,6 +208,12 @@ export const sanitizeInvoice = (raw: unknown): Invoice => {
     }),
     taxMode: r.taxMode === "TTC" ? "TTC" : "HT",
     vatRate: vat,
+    branding: (() => {
+      const b = (r.branding ?? {}) as Record<string, unknown>;
+      const accent = /^#[0-9a-fA-F]{6}$/.test(String(b.accent)) ? String(b.accent) : DEFAULT_BRANDING.accent;
+      const logo = typeof b.logo === "string" && b.logo.startsWith("data:image/") && b.logo.length < 400_000 ? b.logo : "";
+      return { accent, hideFooter: b.hideFooter === true, logo };
+    })(),
     notes: str(r.notes, 2000),
     paymentTerms: str(r.paymentTerms, 600),
     createdAt: typeof r.createdAt === "number" ? r.createdAt : Date.now(),

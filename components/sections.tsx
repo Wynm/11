@@ -274,7 +274,7 @@ export function Pricing() {
           <p className="mt-1 text-[13.5px] text-muted">كل ما تحتاجه لبدء الفاتورة الأولى.</p>
           <ul className="mt-6 space-y-3 text-[14px]">
             {[
-              "فواتير وعروض أثمنة غير محدودة",
+              "حتى 5 مستندات محفوظة",
               "مبلغ بالحروف + فحص قانوني كامل",
               "رابط مشاركة وطباعة PDF",
               "تخزين محلي دائم في متصفحك",
@@ -285,7 +285,7 @@ export function Pricing() {
               </li>
             ))}
           </ul>
-          <Link href="/new" className="btn-primary mt-8 w-full">ابدأ الآن</Link>
+          <Link href="/new" className="btn-primary mt-8 w-full">ابدأ الآن — بلا حساب</Link>
         </div>
 
         <div className="relative overflow-hidden rounded-xl2 border border-pine bg-ink p-8 text-white shadow-lift">
@@ -297,11 +297,11 @@ export function Pricing() {
           <p className="mt-1 text-[13.5px] text-white/60">للمستقل الذي يفوتر كل أسبوع.</p>
           <ul className="mt-6 space-y-3 text-[14px]">
             {[
-              "شعارك وألوانك على الفاتورة",
-              "تذكيرات الأداء عبر واتساب والبريد*",
-              "فواتير متكرّرة ونماذج جاهزة",
-              "تصدير دفعة واحدة (ZIP / CSV)",
-              "نسخة احتياطية سحابية مشفّرة",
+              "شعارك وألوانك على كل مستند",
+              "إخفاء شارة «فاتورا» من الفاتورة",
+              "مستندات غير محدودة (المجاني: 5)",
+              "مفتاح دائم يتحقق محليًا دون إنترنت",
+              "تحديثات مجانية خلال مدة الاشتراك",
             ].map((f) => (
               <li key={f} className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-saffron" strokeWidth={3} />
@@ -309,14 +309,46 @@ export function Pricing() {
               </li>
             ))}
           </ul>
-          <Link href="/new" className="btn-saffron mt-8 w-full">جرّبه مجانًا 14 يومًا</Link>
-          <p className="mt-3 text-center text-[11px] text-white/40">* التذكيرات الآلية قيد التطوير — ستُعلَن للمشتركين أول عشرة.</p>
+          <Link href="/pro" className="btn-saffron mt-8 w-full">فعّل برو — 399 د.م/سنة</Link>
+          <p className="mt-3 text-center text-[11px] text-white/40">
+            أو 49 د.م/شهر · مفتاح تفعيل دائم بدون إنترنت · استرداد 14 يومًا
+          </p>
         </div>
       </div>
 
       <div className="mx-auto mt-8 flex max-w-2xl items-start gap-2.5 rounded-xl border border-line bg-white/60 px-4 py-3 text-[12.5px] leading-relaxed text-muted">
         <Lock className="mt-0.5 h-4 w-4 shrink-0 text-pine" />
         ملاحظة صادقة: النسخة الحالية تعمل بالكامل في متصفحك، فلا نرسل بياناتك إلى أي خادم. خاصية الرابط المشترك تُخزّن نسخة مجمّدة من المستند فقط.
+      </div>
+    </section>
+  );
+}
+
+export function ProBanner() {
+  return (
+    <section className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
+      <div className="relative overflow-hidden rounded-[24px] bg-ink px-6 py-9 text-white sm:px-10">
+        <div className="absolute -left-16 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full bg-pine/40 blur-3xl" />
+        <div className="relative flex flex-wrap items-center justify-between gap-6">
+          <div className="max-w-xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-saffron/40 bg-saffron/10 px-2.5 py-1 text-[11px] font-extrabold text-saffron">
+              <Sparkles className="h-3 w-3" /> فاتورا برو
+            </span>
+            <h2 className="mt-3 text-[26px] font-extrabold leading-snug sm:text-[30px]">
+              فاتورتك تحمل شعارك — لا شعارنا.
+            </h2>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/65">
+              ألوانك، شعارك، بلا سطر «أُنجز بواسطة فاتورا»، ومستندات بلا حد. مفتاح دائم يُتحقق منه دون خادم —
+              فلا حساب ولا إنترنت مطلوب بعد التفعيل.
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-2">
+            <Link href="/pro" className="btn-saffron !px-6 !py-3">
+              فعّل برو — 399 د.م/سنة <ArrowLeft className="h-4 w-4" />
+            </Link>
+            <span className="text-[11.5px] text-white/45">أو 49 د.م/شهر · استرداد كامل خلال 14 يومًا</span>
+          </div>
+        </div>
       </div>
     </section>
   );

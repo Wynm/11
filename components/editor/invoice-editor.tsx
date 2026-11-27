@@ -27,12 +27,15 @@ import { complianceChecks, isCompliant } from "@/lib/compliance";
 import { store } from "@/lib/storage";
 import { downloadPDF, printInvoice } from "@/lib/pdf";
 import { createShare, deliverByEmail } from "@/lib/share";
+import { FREE_LIMIT } from "@/lib/pro";
+import { usePro } from "@/lib/use-pro";
+import { BrandPane } from "./brand-pane";
 import { SheetPreview } from "./sheet-preview";
 import { ClientPane, ItemsPane, MyDataPane, TermsPane } from "./panes";
 import { CopyButton, Modal, Section, StatusPill, Toast } from "./fields";
 import { LogoMark } from "@/components/brand";
 
-type Tab = "data" | "client" | "items" | "terms" | "check";
+type Tab = "data" | "client" | "items" | "terms" | "brand" | "check";
 
 export function InvoiceEditor({
   initialKind,
@@ -54,6 +57,8 @@ export function InvoiceEditor({
   const [email, setEmail] = useState({ to: "", subject: "", message: "السلام عليكم،\n\nتجدون رفقته الفاتورة المطلوبة. شكرًا لثقتكم.", sending: false, error: "" });
   const [toolsOpen, setToolsOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [showLimit, setShowLimit] = useState(false);
+  const [pro] = usePro();
 
   useEffect(() => {
     const savedIssuer = store.issuer();
@@ -89,6 +94,14 @@ export function InvoiceEditor({
       return next;
     });
   }, []);
+
+  const used = useMemo(() => (typeof window === "undefined" ? 0 : store.list().length), [ready]);
+
+  useEffect(() => {
+    // Free plan: after FREE_LIMIT stored documents, offer Pro before creating a new one.
+    if (!ready || pro.active) return;
+    if (used > FREE_LIMIT && !editKey && !fromNumber) setShowLimit(true);
+  }, [ready, pro.active, used, editKey, fromNumber]);
 
   const checks = useMemo(() => (inv ? complianceChecks(inv) : []), [inv]);
   const allOk = inv ? isCompliant(inv) : false;
@@ -202,6 +215,7 @@ export function InvoiceEditor({
     { id: "client", label: "العميل", icon: FileText },
     { id: "items", label: "الخدمات", icon: Banknote },
     { id: "terms", label: "الشروط", icon: FileDown },
+    { id: "brand", label: "الهوية", icon: Sparkles },
     { id: "check", label: "الجاهزية", icon: ShieldCheck },
   ];
 
@@ -230,6 +244,22 @@ export function InvoiceEditor({
             </div>
             <div className="hidden min-w-0 items-center gap-2 md:flex">
               <span className="truncate text-[13.5px] font-extrabold text-ink">{inv.number}</span>
+              {pro.active ? (
+                <Link
+                  href="/pro"
+                  className="hidden items-center gap-1 rounded-full bg-saffron px-2 py-0.5 text-[10px] font-extrabold text-ink sm:inline-flex"
+                  title="فاتورا برو مفعّل"
+                >
+                  <Sparkles className="h-2.5 w-2.5" /> PRO
+                </Link>
+              ) : (
+                <Link
+                  href="/pro"
+                  className="hidden items-center gap-1 rounded-full border border-saffron/40 bg-saffron-soft px-2 py-0.5 text-[10.5px] font-extrabold text-[#8A5A12] transition hover:bg-saffron hover:text-ink sm:inline-flex"
+                >
+                  <Sparkles className="h-2.5 w-2.5" /> فاتورا برو
+                </Link>
+              )}
               <span className={`hidden items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10.5px] font-bold ${
                 failing.length === 0
                   ? "border-pine/20 bg-pine-soft text-pine"
@@ -277,6 +307,9 @@ export function InvoiceEditor({
                     </button>
                     <Link href="/invoices" className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-[13px] font-bold hover:bg-paper">
                       <Receipt className="h-4 w-4 text-pine" /> كل فواتيري
+                    </Link>
+                    <Link href="/pro" className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-[13px] font-bold hover:bg-paper">
+                      <Sparkles className="h-4 w-4 text-saffron" /> {pro.active ? "إدارة فاتورا برو" : "ترقية إلى برو"}
                     </Link>
                     <button
                       onClick={() => {
@@ -366,6 +399,11 @@ export function InvoiceEditor({
                 <TermsPane inv={inv} set={update} />
               </Section>
             )}
+            {tab === "brand" && (
+              <Section title="هوية المستند" sub={pro.active ? "شعارك وألوانك على الفاتورة" : "ميزة احترافية — معاينة قبل التفعيل"} right={pro.active ? <span className="chip !border-pine/30 !bg-pine-soft !py-0.5 !text-pine">برو</span> : <Link href="/pro" className="chip !py-0.5">تفعيل</Link>}>
+                <BrandPane inv={inv} set={update} locked={!pro.active} />
+              </Section>
+            )}
             {tab === "check" && (
               <Section title="فاحص الجاهزية القانونية" sub={allOk ? "كل الشروط مستوفاة" : `${failing.length} شرطًا يحتاج انتباهك`}>
                 <ul className="space-y-2">
@@ -433,6 +471,32 @@ export function InvoiceEditor({
           </div>
         </div>
       </div>
+
+      {/* free-plan ceiling */}
+      <Modal open={showLimit} onClose={() => setShowLimit(false)} title="بلغت حدّ النسخة المجانية" width="max-w-md">
+        <div className="space-y-4">
+          <p className="text-[13.5px] leading-relaxed text-muted">
+            عندك <b className="text-ink">{used}</b> مستندًا محفوظًا (الحد {FREE_LIMIT}). مستندك الحالي محفوظ ويبقى قابلًا
+            للتعديل والتصدير — برو يرفع الحد نهائيًا ويضيف شعارك وألوانك.
+          </p>
+          <ul className="space-y-2 rounded-xl border border-line bg-white p-3.5 text-[12.5px]">
+            {["مستندات غير محدودة", "شعارك وألوانك على الفاتورة", "إخفاء شارة فاتورا", "مفتاح دائم يعمل دون إنترنت"].map((f) => (
+              <li key={f} className="flex items-center gap-2 font-bold text-ink/80">
+                <Check className="h-3.5 w-3.5 text-pine" strokeWidth={3} /> {f}
+              </li>
+            ))}
+          </ul>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Link href="/pro" className="btn-primary justify-center">
+              <Sparkles className="h-4 w-4" /> برو — 399 د.م/سنة
+            </Link>
+            <Link href="/invoices" className="btn-ghost justify-center">
+              إدارة مستنداتي
+            </Link>
+          </div>
+          <p className="text-center text-[11px] text-muted">مجاني إلى الأبد لمستنداتك الحالية · لا حذف لأي بيانات</p>
+        </div>
+      </Modal>
 
       {/* share modal */}
       <Modal open={!!shareModal} onClose={() => setShareModal(null)} title="رابط مشاركة آمن" width="max-w-lg">

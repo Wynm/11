@@ -9,8 +9,10 @@ import {
   HowItWorks,
   PainStrip,
   Pricing,
+  ProBanner,
   UseCases,
 } from "@/components/sections";
+import { LeadCapture } from "@/components/lead-capture";
 
 export default function HomePage() {
   return (
@@ -23,7 +25,9 @@ export default function HomePage() {
         <Features />
         <Compliance />
         <UseCases />
+        <LeadCapture />
         <Pricing />
+        <ProBanner />
         <Faq />
         <FinalCta />
       </main>

@@ -69,9 +69,16 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
       };
 
   const rows = inv.items.filter((i) => i.description.trim() || i.unitPrice > 0);
+  const accent = inv.branding?.accent || "#0B5D50";
+  const logo = inv.branding?.logo || "";
+  const hideFooter = inv.branding?.hideFooter === true;
+  const wordsLabel =
+    inv.language === "fr"
+      ? `${L.words} ${amountInArabicWords(t.total)}`
+      : `${L.words}: ${amountInArabicWords(t.total)} فقط.`;
   const party = (title: string, lines: { k?: string; v: string; strong?: boolean }[]) => (
     <div style={{ border: "1px solid #E6E0D6", borderRadius: 12, padding: "14px 16px", background: "#FCFAF6", minWidth: 0 }}>
-      <div style={{ fontSize: 9.5, letterSpacing: 1.2, color: "#0B5D50", fontWeight: 700, marginBottom: 8 }}>
+      <div style={{ fontSize: 9.5, letterSpacing: 1.2, color: accent, fontWeight: 700, marginBottom: 8 }}>
         {title}
       </div>
       {lines
@@ -110,11 +117,17 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
         <div style={{ display: "flex", gap: 12, alignItems: "center", minWidth: 0 }}>
           <div
             style={{
-              width: 46, height: 46, borderRadius: 12, background: "#0B5D50", color: "#fff",
+              width: 46, height: 46, borderRadius: 12, background: accent, color: "#fff",
               display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, fontWeight: 800, flexShrink: 0,
+              overflow: "hidden",
             }}
           >
-            {(inv.issuer.name || "F").trim().slice(0, 1).toUpperCase()}
+            {logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              (inv.issuer.name || "F").trim().slice(0, 1).toUpperCase()
+            )}
           </div>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.15 }}>{inv.issuer.name || (isFr ? "Votre nom" : "اسمك هنا")}</div>
@@ -125,7 +138,7 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
           </div>
         </div>
         <div style={{ textAlign: isFr ? "right" : "left", flexShrink: 0 }}>
-          <div style={{ fontSize: 30, fontWeight: 800, color: "#0B5D50", lineHeight: 1, letterSpacing: -0.5 }}>
+          <div style={{ fontSize: 30, fontWeight: 800, color: accent, lineHeight: 1, letterSpacing: -0.5 }}>
             {isQuote ? (isFr ? "DEVIS" : "عرض ثمن") : isFr ? "FACTURE" : "فاتورة"}
           </div>
           <div style={{ fontSize: 12, color: "#6B7683", marginTop: 8, direction: "ltr", textAlign: isFr ? "right" : "left" }}>
@@ -158,7 +171,7 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
       {/* table */}
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 22, tableLayout: "fixed" }}>
         <thead>
-          <tr style={{ background: "#0B5D50", color: "#fff" }}>
+          <tr style={{ background: accent, color: "#fff" }}>
             <th style={{ width: 30, padding: "9px 8px", fontSize: 10.5, fontWeight: 700, textAlign: "center" }}>#</th>
             <th style={{ padding: "9px 10px", fontSize: 10.5, fontWeight: 700, textAlign: isFr ? "left" : "right" }}>{L.desc}</th>
             <th style={{ width: 54, padding: "9px 8px", fontSize: 10.5, fontWeight: 700, textAlign: "center" }}>{L.qty}</th>
@@ -213,17 +226,23 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "2px solid #12171D", marginTop: 2, paddingTop: 8 }}>
             <span style={{ fontSize: 12, fontWeight: 800 }}>{L.total}</span>
-            <span className="tnum" style={{ fontSize: 17, fontWeight: 800, color: "#0B5D50", direction: "ltr" }}>{num(t.total)} MAD</span>
+            <span className="tnum" style={{ fontSize: 17, fontWeight: 800, color: accent, direction: "ltr" }}>{num(t.total)} MAD</span>
           </div>
         </div>
       </div>
 
       {/* amount in words */}
       {t.total > 0 ? (
-        <div style={{ marginTop: 16, background: "#0B5D50", color: "#fff", borderRadius: 10, padding: "10px 14px", fontSize: 11.5, lineHeight: 1.7 }}>
-          {isQuote ? null : <span style={{ color: "#E0A03C", fontWeight: 700 }}>{L.words}: </span>}
-          <span style={{ fontWeight: 700 }}>{amountInArabicWords(t.total)}</span>
-          <span> فقط.</span>
+        <div style={{ marginTop: 16, background: accent, color: "#fff", borderRadius: 10, padding: "10px 14px", fontSize: 11.5, lineHeight: 1.7, textAlign: isFr ? "left" : "right" }}>
+          {isQuote ? (
+            <span style={{ fontWeight: 700 }}>{wordsLabel}</span>
+          ) : (
+            <>
+              <span style={{ color: "#E0A03C", fontWeight: 700 }}>{L.words}: </span>
+              <span style={{ fontWeight: 700 }}>{amountInArabicWords(t.total)}</span>
+              <span> فقط.</span>
+            </>
+          )}
         </div>
       ) : null}
 
@@ -237,7 +256,7 @@ export function InvoiceSheet({ inv, scale = 1 }: { inv: Invoice; scale?: number 
       {/* footer */}
       <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #E6E0D6", display: "flex", justifyContent: "space-between", gap: 10, fontSize: 8.5, color: "#8A8378" }}>
         <span>{[inv.issuer.name, inv.issuer.ice && `ICE ${inv.issuer.ice}`, inv.issuer.if && `IF ${inv.issuer.if}`].filter(Boolean).join(" · ")}</span>
-        <span>{L.footer}</span>
+        {hideFooter ? null : <span>{L.footer}</span>}
       </div>
     </div>
   );

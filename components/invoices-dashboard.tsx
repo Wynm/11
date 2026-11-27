@@ -17,6 +17,7 @@ import {
   Plus,
   ReceiptText,
   Search,
+  Sparkles,
   Trash2,
   TrendingUp,
 } from "lucide-react";
@@ -28,6 +29,8 @@ import { isCompliant } from "@/lib/compliance";
 import { createShare } from "@/lib/share";
 import { StatusPill, Toast } from "./editor/fields";
 import { Brand } from "./brand";
+import { FREE_LIMIT } from "@/lib/pro";
+import { usePro } from "@/lib/use-pro";
 
 type Filter = "all" | "draft" | "sent" | "paid" | "late";
 
@@ -77,6 +80,7 @@ export function InvoicesDashboard() {
   const [toast, setToast] = useState<string | null>(null);
   const [sharing, setSharing] = useState<string | null>(null);
 
+  const [pro] = usePro();
   const load = useCallback(() => setRows(store.list()), []);
 
   useEffect(() => {
@@ -167,6 +171,15 @@ export function InvoicesDashboard() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Brand />
           <div className="flex items-center gap-2">
+            {pro.active ? (
+              <Link href="/pro" className="hidden items-center gap-1 rounded-full bg-saffron px-2.5 py-1 text-[11px] font-extrabold text-ink sm:inline-flex">
+                PRO
+              </Link>
+            ) : (
+              <Link href="/pro" className="hidden items-center gap-1 rounded-full border border-saffron/40 bg-saffron-soft px-2.5 py-1 text-[11px] font-extrabold text-[#8A5A12] transition hover:bg-saffron hover:text-ink sm:inline-flex">
+                <Sparkles className="h-3 w-3" /> ترقية
+              </Link>
+            )}
             <Link href="/" className="hidden text-[13px] font-bold text-muted hover:text-ink sm:block">الرئيسية</Link>
             <Link href="/new" className="btn-primary !px-4 !py-2.5">
               <Plus className="h-4 w-4" /> فاتورة جديدة
@@ -222,6 +235,29 @@ export function InvoicesDashboard() {
             + عرض ثمن
           </Link>
         </div>
+
+        {!pro.active ? (
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl2 border border-line bg-white px-4 py-3 shadow-card">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-3 text-[12px] font-bold">
+                <span className="text-ink">النسخة المجانية — {rows.length} من {FREE_LIMIT} مستندات</span>
+                <Link href="/pro" className="shrink-0 text-pine hover:underline">
+                  ارفع الحد ←
+                </Link>
+              </div>
+              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-line">
+                <div
+                  className={`h-full rounded-full transition-all ${rows.length >= FREE_LIMIT ? "bg-clay" : "bg-pine"}`}
+                  style={{ width: `${Math.min(100, Math.round((rows.length / FREE_LIMIT) * 100))}%` }}
+                />
+              </div>
+            </div>
+            <Link href="/pro" className="btn-ghost !py-2 text-[12px]">
+              <Sparkles className="h-3.5 w-3.5 text-saffron" />
+              شعارك + بلا حد — 399 د.م/سنة
+            </Link>
+          </div>
+        ) : null}
 
         <div className="mt-3 overflow-hidden rounded-xl2 border border-line bg-white shadow-card">
           {!ready ? null : filtered.length === 0 ? (
