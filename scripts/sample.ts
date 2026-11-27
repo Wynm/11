@@ -1,0 +1,28 @@
+export const sample = {
+  v: 1 as const,
+  kind: "invoice" as const,
+  number: "FAC-2026-014",
+  issueDate: "2026-11-27",
+  dueDate: "2026-12-27",
+  status: "sent" as const,
+  currency: "MAD" as const,
+  language: "ar" as const,
+  issuer: {
+    name: "يوسف بنعلي", activity: "تصوير منتجات ومحتوى بصري",
+    ice: "002345678900012", if: "458670123", rc: "55287", cnss: "7712345",
+    email: "youssef.benali@example.ma", phone: "+212 661 23 45 67",
+    address: "شارع الحسن الثاني، حي النخيل، فاس",
+    bankName: "Attijariwafa Bank", rib: "007 780 0001234567890123 45",
+  },
+  client: { company: "Studio Nord SARL", name: "سارة المنصوري", email: "sara@studionord.ma", address: "حي المعاريف، الدار البيضاء", ice: "001234567800034", phone: "+212 6 62 11 44 09" },
+  items: [
+    { id: "d1", description: "جلسة تصوير منتجات — 12 صورة معدّلة", qty: 1, unitPrice: 2800 },
+    { id: "d2", description: "مونتاج وتسليم رقمي للفيديوهات", qty: 2, unitPrice: 700 },
+  ],
+  taxMode: "HT" as const,
+  vatRate: 20,
+  notes: "شكرًا لثقتكم — التسليم خلال 48 ساعة عبر رابط خاص.",
+  paymentTerms: "الدفع بالتحويل البنكي خلال 30 يومًا من تاريخ الفاتورة، مع ذكر رقم الفاتورة في خانة البيان.",
+  createdAt: 1732700000000,
+  paidAt: null,
+};
