@@ -18,6 +18,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { activateLicense, priceLabel, PRO_PRICE, proDaysLeft, signOutPro, type ProState } from "@/lib/pro";
+import { BUSINESS } from "@/lib/business";
 import { usePro } from "@/lib/use-pro";
 import { Brand } from "@/components/brand";
 import { Toast } from "@/components/editor/fields";
@@ -49,8 +50,8 @@ const FAQ = [
   },
 ];
 
-const WHATSAPP = "212661234567";
-const EMAIL = "bonjour@fatoura.ma";
+const WHATSAPP = BUSINESS.whatsapp;
+const EMAIL = BUSINESS.email;
 
 export function SubscribePage() {
   const [pro, refresh] = usePro();
@@ -199,11 +200,11 @@ export function SubscribePage() {
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-muted">RIB</span>
                       <div className="flex items-center gap-2">
-                        <code className="tnum text-[12px]">007 780 0001234567890123 45</code>
+                        <code className="tnum text-[12px]">{BUSINESS.bank.display}</code>
                         <button
                           type="button"
                           onClick={async () => {
-                            await navigator.clipboard.writeText("007780000123456789012345");
+                            await navigator.clipboard.writeText(BUSINESS.bank.rib);
                             setCopied(true);
                             window.setTimeout(() => setCopied(false), 2000);
                           }}
@@ -214,7 +215,9 @@ export function SubscribePage() {
                         </button>
                       </div>
                     </div>
-                    <div className="mt-1">فاتورا — Youssef Benali · Attijariwafa Bank</div>
+                    <div className="mt-1">
+                      فاتورا — {BUSINESS.bank.holder} · {BUSINESS.bank.name}
+                    </div>
                   </div>
                 </div>
               </li>
@@ -311,6 +314,12 @@ export function SubscribePage() {
         لا اشتراكات صامتة ولا تجديد آلي: تدفع مرة، ويصلك مفتاح لمدة محددة. عند الانتهاء يعود التطبيق للمجاني وتحتفظ
         بكل مستنداتك ومفتاحك القديم.
       </p>
+
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-[12px]">
+        <Link href="/flyer" className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 font-bold text-muted transition hover:text-pine">
+          ملصق مطبوع للورشات والمقاهي — اطبع وانشر
+        </Link>
+      </div>
 
       {toast ? <Toast message={toast} onDone={() => setToast(null)} /> : null}
     </main>
