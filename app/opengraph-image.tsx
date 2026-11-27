@@ -82,7 +82,7 @@ export default async function OpengraphImage() {
         <div style={{ position: "absolute", left: -100, bottom: -130, width: 330, height: 330, borderRadius: 999, background: "#FBF1DE" }} />
 
         {/* left: message */}
-        <div style={{ width: 560, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", zIndex: 1, overflow: "hidden" }}>
+        <div style={{ width: 560, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", overflow: "hidden" }}>
           <div style={{ display: "flex", flexDirection: "row-reverse", alignItems: "center", gap: 12 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: "#12171D" }}>فاتورا</span>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: "#0B5D50", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 800 }}>ف</div>
@@ -127,7 +127,6 @@ export default async function OpengraphImage() {
             display: "flex",
             flexDirection: "column",
             gap: 14,
-            zIndex: 1,
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid #12171D", paddingBottom: 14 }}>
